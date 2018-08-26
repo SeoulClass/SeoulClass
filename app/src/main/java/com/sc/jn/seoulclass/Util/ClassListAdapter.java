@@ -21,6 +21,10 @@ public class ClassListAdapter extends BaseAdapter{
     public ClassListAdapter() {
     }
 
+    public ClassListAdapter(ArrayList<ClassListItem> classItemList) {
+        this.classItemList = classItemList;
+    }
+
     @Override
     public int getCount() {
         return classItemList.size();

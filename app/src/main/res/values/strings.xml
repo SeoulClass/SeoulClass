@@ -10,15 +10,20 @@
     <string name="action_settings">Settings</string>
 
     <!--MainActivity-->
+    <string name="main_0">검색</string>
     <string name="main_1">건강/스포츠</string>
-    <string name="main_2">교양</string>
-    <string name="main_3">도시농업</string>
-    <string name="main_4">미술제작</string>
-    <string name="main_5">역사</string>
-    <string name="main_6">자연/과학</string>
-    <string name="main_7">체험/견학</string>
-    <string name="main_8">취미</string>
-    <string name="main_9">기타</string>
+    <string name="main_2">취미레저</string>
+    <string name="main_3">취미</string>
+    <string name="main_4">자연/과학</string>
+    <string name="main_5">생활체육</string>
+    <string name="main_6">체험/견학</string>
+    <string name="main_7">교양</string>
+    <string name="main_8">역사</string>
+    <string name="main_9">도시농업</string>
+    <string name="main_10">정보통신</string>
+    <string name="main_11">기타</string>
+
+
 
     <!--FindAdressActivity-->
     <string name="fa_title">지번, 도로명, 건물명을 \n입력하세요.</string>

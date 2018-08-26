@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sc.jn.seoulclass">
 
-
-
     <!-- 주소 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -12,7 +10,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label=""
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -28,14 +26,15 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".FindAdressActivity"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".ClassListActivity" />
 
-        <activity android:name=".ClassListActivity"></activity>
+        <meta-data
+            android:name="com.sc.jn.seoulclass.AppKey"
+            android:value="69ece4171c3474f04c7984d972e10497" />
 
-        <meta-data android:name="com.sc.jn.seoulclass.AppKey"
-            android:value="69ece4171c3474f04c7984d972e10497"/>
+        <activity android:name=".DibsActivity" />
+        <activity android:name=".ReviewActivity" />
+        <activity android:name=".AddressActivity" android:theme="@style/PopUpTheme"></activity>
     </application>
 
 </manifest>
