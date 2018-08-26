@@ -24,7 +24,6 @@
     <string name="main_11">기타</string>
 
 
-
     <!--FindAdressActivity-->
     <string name="fa_title">지번, 도로명, 건물명을 \n입력하세요.</string>
     <string name="fa_example">예) OO동 12-3 또는 OO아파트</string>

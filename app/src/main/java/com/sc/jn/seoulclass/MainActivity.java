@@ -16,12 +16,14 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sc.jn.seoulclass.Util.ManagePublicData;
 import com.sc.jn.seoulclass.Util.ManageSharedPreference;
 import com.sc.jn.seoulclass.Util.PermissionUtil;
 
@@ -36,9 +38,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        checkAddress();//주소 설정되어있는지 확인
-
 
         txtToolbar = (TextView)findViewById(R.id.txt_toolbar);
         txtToolbar.setText(ManageSharedPreference.getPreference("address",getApplicationContext()));
@@ -62,6 +61,9 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         txtToolbar.setText(ManageSharedPreference.getPreference("address",getApplicationContext()));
+
     }
 
     @Override
@@ -248,11 +251,11 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-    private void checkAddress(){
-        if(ManageSharedPreference.getPreference("address",getApplicationContext())==""){
-            Intent intent = new Intent(getApplicationContext(), AddressActivity.class);
-            startActivity(intent);
+    private boolean isExistAddress(){
+        if(ManageSharedPreference.getPreference("address",getApplicationContext()).equals("")){
+           return true;
         }
+        return false;
     }
 
     public Point getScreenSize(Activity activity){

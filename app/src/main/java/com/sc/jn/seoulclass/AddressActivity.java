@@ -16,11 +16,10 @@ import com.sc.jn.seoulclass.Util.ManageSharedPreference;
 public class AddressActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
     private Button[] mButton = new Button[26];
     private String value;
-    public static Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = AddressActivity.this;
         setContentView(R.layout.activity_address);
         
 
@@ -70,7 +69,6 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     public void submit(View v){
 // 기존에 설정된 주소와 같으면 Just finish();
         if(value.equals(ManageSharedPreference.getPreference("address",getApplicationContext()))){
-
             finish();
         }
         else {

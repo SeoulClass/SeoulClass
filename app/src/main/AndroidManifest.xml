@@ -34,7 +34,10 @@
 
         <activity android:name=".DibsActivity" />
         <activity android:name=".ReviewActivity" />
-        <activity android:name=".AddressActivity" android:theme="@style/PopUpTheme"></activity>
+        <activity
+            android:name=".AddressActivity"
+            android:theme="@style/PopUpTheme" />
+        <activity android:name=".DetailActivity"></activity>
     </application>
 
 </manifest>

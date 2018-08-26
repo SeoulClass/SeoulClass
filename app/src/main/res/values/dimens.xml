@@ -29,4 +29,8 @@
     <dimen name="pa_vertical_margin">6dp</dimen>
     <dimen name="pa_button_txt_size">15dp</dimen>
 
+    <!--ListView_Class-->
+    <dimen name="cl_txt_size_title">20dp</dimen>
+    <dimen name="cl_txt_size_content">15dp</dimen>
+
 </resources>

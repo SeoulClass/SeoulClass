@@ -1,5 +1,6 @@
 package com.sc.jn.seoulclass.Util;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.widget.ProgressBar;
 import com.sc.jn.seoulclass.AddressActivity;
 import com.sc.jn.seoulclass.MainActivity;
 import com.sc.jn.seoulclass.Model.ClassListItem;
+import com.sc.jn.seoulclass.R;
+import com.sc.jn.seoulclass.SplashActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,12 +26,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ManagePublicData extends AppCompatActivity{
     private static ManagePublicData managePublicData;
 
-    private Context context;
+    private Activity context;
 
     private ArrayList<ClassListItem> Category1ArrayList; //건강/스포츠
     private ArrayList<ClassListItem> Category2ArrayList; //취미레저
@@ -45,19 +52,21 @@ public class ManagePublicData extends AppCompatActivity{
     public ParsePublicData parsePublicData;
 
 
-    public static ManagePublicData getInstance(Context context){
+    public static ManagePublicData getInstance(Activity context){
         if(managePublicData == null){
             managePublicData = new ManagePublicData(context);
         }
         return managePublicData;
     }
 
+
+
     public static void reFreshManagePublicData(){
         managePublicData = null;
     }
 
 
-    private ManagePublicData(Context context) {
+    private ManagePublicData(Activity context) {
         this.context = context;
         Category1ArrayList = new ArrayList<ClassListItem>();
         Category2ArrayList = new ArrayList<ClassListItem>();
@@ -75,8 +84,8 @@ public class ManagePublicData extends AppCompatActivity{
 
     }
 
-    public void reFreshParse(){
-        this.parsePublicData = new ParsePublicData();
+    public static ManagePublicData getManagePublicData() {
+        return managePublicData;
     }
 
     public ArrayList<ClassListItem> getCategory1ArrayList() {
@@ -180,7 +189,7 @@ public class ManagePublicData extends AppCompatActivity{
 
         @Override
         protected String doInBackground(Void... number) {
-            URL url = null;
+            URL url;
             String str,receiveMsg=null;
             try{
                 url = new URL("http://openapi.seoul.go.kr:8088/6746736e576a696e34315057467a49/json/"+addressToSymbol()+"ListPublicReservationEducation/1/1000/");
@@ -208,13 +217,23 @@ public class ManagePublicData extends AppCompatActivity{
         protected void onPostExecute(String str) {
             doJSONParser(str);
             progressDialog.dismiss();
-            AddressActivity.activity.finish();
+            if(context.getLocalClassName().equals("SplashActivity")){
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
+            }
+            context.finish();
             super.onPostExecute(str);
 
         }
 
         private void doJSONParser(String str){
             try{
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+
+                Log.d("jinho",date.toString());
 
                 JSONObject json = new JSONObject(str);
                 JSONObject list = json.getJSONObject(addressToSymbol()+"ListPublicReservationEducation");
@@ -226,6 +245,7 @@ public class ManagePublicData extends AppCompatActivity{
                     classListItem = new ClassListItem();
 
                     json=jarr.getJSONObject(i);
+                    classListItem.setId(json.getString("SVCID"));
                     classListItem.setMaxclassnm(json.getString("MAXCLASSNM"));
                     classListItem.setMinclassnm(json.getString("MINCLASSNM"));
                     classListItem.setPay(json.getString("PAYATNM"));
@@ -238,6 +258,14 @@ public class ManagePublicData extends AppCompatActivity{
                     classListItem.setRcptbgnt(json.getString("RCPTBGNDT"));
                     classListItem.setRcptenddt(json.getString("RCPTENDDT"));
 
+                    try{
+                        Date Rcptenddt = dateFormat.parse(classListItem.getRcptenddt());
+//                      접수기간 지나면 continue;
+                        if(date.after(Rcptenddt))
+                            continue;
+                    }catch (ParseException e){
+                        e.printStackTrace();
+                    }
 
 
                     switch(nmToNumber(classListItem.getMinclassnm())){
@@ -355,7 +383,7 @@ public class ManagePublicData extends AppCompatActivity{
                     result="YS";
                     break;
                 case "종로구" :
-                    result="JR";
+                    result="JN";
                     break;
                 case "중구" :
                     result="JG";
