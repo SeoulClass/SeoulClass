@@ -33,11 +33,27 @@ public class MainActivity extends AppCompatActivity
     private String[] permissions = {Manifest.permission.INTERNET};
     private WebView webView;
     private TextView txtToolbar;
+    TextView[] txtView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//       카테고리 텍스트
+        txtView = new TextView[12];
+        txtView[1]= (TextView)findViewById(R.id.main_txt_1);
+        txtView[2]= (TextView)findViewById(R.id.main_txt_2);
+        txtView[3]= (TextView)findViewById(R.id.main_txt_3);
+        txtView[4]= (TextView)findViewById(R.id.main_txt_4);
+        txtView[5]= (TextView)findViewById(R.id.main_txt_5);
+        txtView[6]= (TextView)findViewById(R.id.main_txt_6);
+        txtView[7]= (TextView)findViewById(R.id.main_txt_7);
+        txtView[8]= (TextView)findViewById(R.id.main_txt_8);
+        txtView[9]= (TextView)findViewById(R.id.main_txt_9);
+        txtView[10]= (TextView)findViewById(R.id.main_txt_10);
+        txtView[11]= (TextView)findViewById(R.id.main_txt_11);
+
 
         txtToolbar = (TextView)findViewById(R.id.txt_toolbar);
         txtToolbar.setText(ManageSharedPreference.getPreference("address",getApplicationContext()));
@@ -116,6 +132,19 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         txtToolbar.setText(ManageSharedPreference.getPreference("address",getApplicationContext()));
+        ManagePublicData managePublicData = ManagePublicData.getInstance(MainActivity.this);
+        txtView[1].setText(getString(R.string.main_1,managePublicData.getCategory1ArrayList().size()));
+        txtView[2].setText(getString(R.string.main_2,managePublicData.getCategory2ArrayList().size()));
+        txtView[3].setText(getString(R.string.main_3,managePublicData.getCategory3ArrayList().size()));
+        txtView[4].setText(getString(R.string.main_4,managePublicData.getCategory4ArrayList().size()));
+        txtView[5].setText(getString(R.string.main_5,managePublicData.getCategory5ArrayList().size()));
+        txtView[6].setText(getString(R.string.main_6,managePublicData.getCategory6ArrayList().size()));
+        txtView[7].setText(getString(R.string.main_7,managePublicData.getCategory7ArrayList().size()));
+        txtView[8].setText(getString(R.string.main_8,managePublicData.getCategory8ArrayList().size()));
+        txtView[9].setText(getString(R.string.main_9,managePublicData.getCategory9ArrayList().size()));
+        txtView[10].setText(getString(R.string.main_10,managePublicData.getCategory10ArrayList().size()));
+        txtView[11].setText(getString(R.string.main_11,managePublicData.getCategory11ArrayList().size()));
+
 
     }
 
