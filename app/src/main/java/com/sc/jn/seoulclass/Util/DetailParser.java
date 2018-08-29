@@ -45,7 +45,7 @@ public class DetailParser extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... strings) {
-        String url = strings[0];
+        String url = "https://yeyak.seoul.go.kr/reservation/view.web?rsvsvcid="+strings[0];
         try {
             Document doc = Jsoup.connect(url).get();
             pImg = doc.selectFirst(".imgBox img");

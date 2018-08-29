@@ -2,10 +2,14 @@ package com.sc.jn.seoulclass.Util;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sc.jn.seoulclass.Model.ClassListItem;
@@ -15,24 +19,29 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class ClassListAdapter extends BaseAdapter{
+public class ClassListAdapter extends BaseAdapter implements Filterable{
 
     private ArrayList<ClassListItem> classItemList = new ArrayList<ClassListItem>();
+    private ArrayList<ClassListItem> filteredItemList = new ArrayList<>();
 
+    private Filter listFilter;
 
 
     public ClassListAdapter(ArrayList<ClassListItem> classItemList) {
         this.classItemList = classItemList;
+        this.filteredItemList = classItemList;
     }
+
+
 
     @Override
     public int getCount() {
-        return classItemList.size();
+        return filteredItemList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return classItemList.get(position);
+        return filteredItemList.get(position);
     }
 
     // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
@@ -65,7 +74,7 @@ public class ClassListAdapter extends BaseAdapter{
 
 
 
-        ClassListItem classListItem = classItemList.get(position);
+        ClassListItem classListItem = filteredItemList.get(position);
 
         String Rcptbgnt= classListItem.getRcptbgnt().split(" ")[0];
         String Rcptenddt= classListItem.getRcptenddt().split(" ")[0];
@@ -83,4 +92,53 @@ public class ClassListAdapter extends BaseAdapter{
 
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(listFilter == null){
+            listFilter = new ListFilter();
+        }
+        return listFilter;
+    }
+
+    private class ListFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+
+            if(constraint == null || constraint.length() == 0){
+                results.values = classItemList;
+                results.count = classItemList.size();
+            }else{
+                ArrayList<ClassListItem> itemList = new ArrayList<>();
+
+                for(ClassListItem item : classItemList){
+                    if(item.getTitle().contains(constraint.toString())){
+                        Log.d("jinho",item.getTitle()+"//"+constraint.toString()+"//"+String.valueOf(item.getTitle().contains(constraint.toString())));
+                        itemList.add(item);
+                    }
+                }
+                results.values = itemList;
+                results.count = itemList.size();
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredItemList = (ArrayList<ClassListItem>) results.values;
+
+            if(results.count> 0){
+                notifyDataSetChanged();
+            }else{
+                notifyDataSetInvalidated();
+            }
+
+        }
+    }
 }

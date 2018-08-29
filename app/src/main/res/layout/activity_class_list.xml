@@ -25,39 +25,14 @@
             android:textSize="@dimen/txt_normal" />
 
     </android.support.v7.widget.Toolbar>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!--필터-->
-        <LinearLayout
-            android:id="@+id/dt_filter"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.SearchView
+            android:id="@+id/cl_searchView"
+            android:layout_width="match_parent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_height="wrap_content"
-            android:elevation="1dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="1번" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="1번" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="1번" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="1번" />
-        </LinearLayout>
+            android:clickable="true"
+            />
 
 
         <ImageView
@@ -69,11 +44,12 @@
 
         <ListView
             android:id="@+id/listview_classList"
+            android:layout_below="@+id/cl_searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textFilterEnabled="true"
             android:background="@android:color/white">
 
         </ListView>
-    </RelativeLayout>
 
 </LinearLayout>

@@ -7,6 +7,25 @@
         android:title=""
         app:showAsAction="ifRoom"
         >
+        <menu>
+            <item
+                android:id="@+id/cl_sub1"
+                android:title="가나다순"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/cl_sub2"
+                android:title="연령순"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/cl_sub3"
+                android:title="가격순"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/cl_sub4"
+                android:title="접수기간순"
+                app:showAsAction="never"/>
+
+        </menu>
 
     </item>
 </menu>

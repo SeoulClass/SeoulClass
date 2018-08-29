@@ -77,7 +77,7 @@ public class ReviewFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_review, container, false);
 
         //==== Class_name을 세팅합니다. ====//
-        class_name=((DetailActivity)getActivity()).getClassListItem().getId();
+        class_name=DetailActivity.id;
 
         //==== REVIEW를 불러옵니다. ====//
         new REVIEW_FIND().execute("https://seoulclass.ml/review/download");

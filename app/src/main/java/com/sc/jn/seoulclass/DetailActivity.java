@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.sc.jn.seoulclass.Model.ClassListItem;
 import com.sc.jn.seoulclass.Util.DetailAdapter;
+import com.sc.jn.seoulclass.Util.DetailParser;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,14 +28,12 @@ import java.net.URL;
 public class DetailActivity extends AppCompatActivity {
 
 
-    ClassListItem classListItem;
-    TextView txt_title;
+    private TextView txt_title;
     private ImageView favorite;
     private boolean isPreferred=false;
+    private String title;
+    public static String id;
 
-    public ClassListItem getClassListItem() {
-        return classListItem;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,8 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        classListItem = (ClassListItem) intent.getSerializableExtra("obj");
+        title = intent.getStringExtra("title");
+        id = intent.getStringExtra("id");
         txt_title = (TextView)findViewById(R.id.dt_txt_title);
 
         DetailAdapter detailAdapter = new DetailAdapter(getSupportFragmentManager());
@@ -92,8 +92,8 @@ public class DetailActivity extends AppCompatActivity {
 
                 POST_PARAMS="user_id="+ MainActivity.user_id;
                 POST_PARAMS+="&login_route="+MainActivity.login_route;
-                POST_PARAMS+="&class_name="+ classListItem.getId();
-                POST_PARAMS+="&class_title="+classListItem.getTitle();
+                POST_PARAMS+="&class_name="+ id;
+                POST_PARAMS+="&class_title="+ title;
 
                 URL url = null;
                 url = new URL(urls[0]);
@@ -170,9 +170,9 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        txt_title.setText(classListItem.getTitle());
-//        DetailParser detailParser = new DetailParser(DetailActivity.this);
-//        detailParser.execute(classListItem.getId());
+        txt_title.setText(title);
+        DetailParser detailParser = new DetailParser(DetailActivity.this);
+        detailParser.execute(id);
         if(MainActivity.isLoggedIn) {//로그인 되 있으면
             new favoriteTask().execute("https://seoulclass.ml/favorite/find");
         }

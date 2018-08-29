@@ -1,14 +1,24 @@
 package com.sc.jn.seoulclass;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,44 +27,88 @@ import com.sc.jn.seoulclass.Util.ClassListAdapter;
 import com.sc.jn.seoulclass.Util.ManagePublicData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ClassListActivity extends AppCompatActivity {
 
-    ClassListAdapter adapter;
-    Toolbar toolbar ;
+    private ClassListAdapter adapter;
+    private Toolbar toolbar ;
+    private ArrayList<ClassListItem> temp;
+    private ListView listView;
+    private SearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_list);
         int nm = getIntent().getIntExtra("nm",0);
         String title = getIntent().getStringExtra("title");
-        ArrayList<ClassListItem> temp;
-        temp = selectCategory(nm);
 
-        ListView listView;
+
+//        Start : to ListView
+        temp = new ArrayList<ClassListItem>(selectCategory(nm));
+        listView = (ListView)findViewById(R.id.listview_classList);
+        adapter = new ClassListAdapter(temp);
+        listView.setEmptyView(findViewById(R.id.listview_empty));
+        listView.setAdapter(adapter);
+//        End
+
+
+//        Start : for Search View
+        searchView = (SearchView)findViewById(R.id.cl_searchView);
+        searchView.setIconifiedByDefault(false);
+        searchView.setQueryHint("Search Here");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(TextUtils.isEmpty(newText)){
+                    listView.clearTextFilter();
+                }else{
+                    Log.d("jinho",newText);
+                    listView.setFilterText(newText);
+                }
+                return true;
+            }
+        });
+//        End
+
+
+//        For Toolbar=========================================
+
         toolbar = (Toolbar) findViewById(R.id.dt_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ((TextView)findViewById(R.id.dt_txt_toolbar)).setText(title);
 
+//====================================================================
 
-        adapter = new ClassListAdapter(temp);
-        listView = (ListView)findViewById(R.id.listview_classList);
-        listView.setEmptyView(findViewById(R.id.listview_empty));
-        listView.setAdapter(adapter);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
                 ClassListItem item =(ClassListItem) adapter.getItem(position);
-                intent.putExtra("obj", item );
+                intent.putExtra("title", item.getTitle() );
+                intent.putExtra("id",item.getId());
                 adapter.getItem(position);
                 startActivity(intent);
             }
         });
-
 
     }
 
@@ -68,12 +122,26 @@ public class ClassListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case  R.id.filter :
-                return true;
+            case  R.id.cl_sub1 : {
+                Collections.sort(temp,new CompareBase());
+                adapter.notifyDataSetChanged();
+            }
         }
         return true;
     }
 
+
+    class CompareBase implements Comparator<ClassListItem> {
+
+        @Override
+        public int compare(ClassListItem o1, ClassListItem o2) {
+            if(o1.getTitle().compareTo(o2.getTitle())>0){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
+    }
     private ArrayList<ClassListItem> selectCategory(int nm){
         ArrayList<ClassListItem> temp=null;
         switch(nm){

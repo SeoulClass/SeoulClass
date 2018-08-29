@@ -67,7 +67,7 @@ public class ReviewActivity extends AppCompatActivity {
                 ReviewItem item = (ReviewItem) reviewManageAdapter.getItem(position);
 
                 Intent intent= new Intent(ReviewActivity.this,DetailActivity.class);
-                intent.putExtra("class_id",item.getClassID());
+                intent.putExtra("id",item.getClassID());
                 startActivity(intent);
             }
         });
