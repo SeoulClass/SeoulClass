@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sc.jn.seoulclass.Model.ClassListItem;
 import com.sc.jn.seoulclass.Util.ClassListAdapter;
@@ -44,6 +45,8 @@ public class ClassListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_class_list);
         int nm = getIntent().getIntExtra("nm",0);
         String title = getIntent().getStringExtra("title");
+
+
 
 
 //        Start : to ListView
@@ -103,10 +106,17 @@ public class ClassListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
                 ClassListItem item =(ClassListItem) adapter.getItem(position);
-                intent.putExtra("title", item.getTitle() );
-                intent.putExtra("id",item.getId());
-                adapter.getItem(position);
-                startActivity(intent);
+                if(item.getUrl().contains("yeyak")){
+                    intent.putExtra("title", item.getTitle() );
+                    intent.putExtra("id",item.getId());
+                    adapter.getItem(position);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(),"서비스 준비중입니다.", Toast.LENGTH_SHORT).show();
+
+                    //다른사이트
+                }
+
             }
         });
 
@@ -137,8 +147,10 @@ public class ClassListActivity extends AppCompatActivity {
         public int compare(ClassListItem o1, ClassListItem o2) {
             if(o1.getTitle().compareTo(o2.getTitle())>0){
                 return 1;
-            }else{
+            }else if(o1.getTitle().compareTo(o2.getTitle())<0){
                 return -1;
+            }else{
+                return 0;
             }
         }
     }

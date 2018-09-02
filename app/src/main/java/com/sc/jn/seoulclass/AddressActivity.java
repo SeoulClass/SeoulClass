@@ -1,77 +1,101 @@
 package com.sc.jn.seoulclass;
 
-import android.app.Activity;
-import android.provider.Telephony;
+import android.Manifest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.sc.jn.seoulclass.Util.ManagePublicData;
 import com.sc.jn.seoulclass.Util.ManageSharedPreference;
+import com.sc.jn.seoulclass.Util.PermissionUtil;
 
-public class AddressActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapReverseGeoCoder;
+import net.daum.mf.map.api.MapView;
+
+public class AddressActivity extends AppCompatActivity implements View.OnFocusChangeListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     private Button[] mButton = new Button[26];
     private String value;
-
+    private MapView mapView;
+    private MapReverseGeoCoder mReverseGeoCoder = null;
+    private final String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    private final int requestCode = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
+        mapView = (MapView) findViewById(R.id.map);
+        mapView.setDaumMapApiKey(getResources().getString(R.string.kakao_map_key));
+        mapView.setCurrentLocationEventListener(this);
+        //권한체크
+        if(!(PermissionUtil.checkPermissions(AddressActivity.this, permissions[0])
+                && PermissionUtil.checkPermissions(AddressActivity.this,permissions[1]))){
+            PermissionUtil.requestPermissions(AddressActivity.this, permissions, requestCode);
+        }
 
-        mButton[0] = (Button)findViewById(R.id.pa_addr_0);
-        mButton[1] = (Button)findViewById(R.id.pa_addr_1);
-        mButton[2] = (Button)findViewById(R.id.pa_addr_2);
-        mButton[3] = (Button)findViewById(R.id.pa_addr_3);
-        mButton[4] = (Button)findViewById(R.id.pa_addr_4);
-        mButton[5] = (Button)findViewById(R.id.pa_addr_5);
-        mButton[6] = (Button)findViewById(R.id.pa_addr_6);
-        mButton[7] = (Button)findViewById(R.id.pa_addr_7);
-        mButton[8] = (Button)findViewById(R.id.pa_addr_8);
-        mButton[9] = (Button)findViewById(R.id.pa_addr_9);
-        mButton[10] = (Button)findViewById(R.id.pa_addr_10);
-        mButton[11] = (Button)findViewById(R.id.pa_addr_11);
-        mButton[12] = (Button)findViewById(R.id.pa_addr_12);
-        mButton[13] = (Button)findViewById(R.id.pa_addr_13);
-        mButton[14] = (Button)findViewById(R.id.pa_addr_14);
-        mButton[15] = (Button)findViewById(R.id.pa_addr_15);
-        mButton[16] = (Button)findViewById(R.id.pa_addr_16);
-        mButton[17] = (Button)findViewById(R.id.pa_addr_17);
-        mButton[18] = (Button)findViewById(R.id.pa_addr_18);
-        mButton[19] = (Button)findViewById(R.id.pa_addr_19);
-        mButton[20] = (Button)findViewById(R.id.pa_addr_20);
-        mButton[21] = (Button)findViewById(R.id.pa_addr_21);
-        mButton[22] = (Button)findViewById(R.id.pa_addr_22);
-        mButton[23] = (Button)findViewById(R.id.pa_addr_23);
-        mButton[24] = (Button)findViewById(R.id.pa_addr_24);
-        mButton[25] = (Button)findViewById(R.id.pa_addr_25);
+        mButton[0] = (Button) findViewById(R.id.pa_addr_0);
+        mButton[1] = (Button) findViewById(R.id.pa_addr_1);
+        mButton[2] = (Button) findViewById(R.id.pa_addr_2);
+        mButton[3] = (Button) findViewById(R.id.pa_addr_3);
+        mButton[4] = (Button) findViewById(R.id.pa_addr_4);
+        mButton[5] = (Button) findViewById(R.id.pa_addr_5);
+        mButton[6] = (Button) findViewById(R.id.pa_addr_6);
+        mButton[7] = (Button) findViewById(R.id.pa_addr_7);
+        mButton[8] = (Button) findViewById(R.id.pa_addr_8);
+        mButton[9] = (Button) findViewById(R.id.pa_addr_9);
+        mButton[10] = (Button) findViewById(R.id.pa_addr_10);
+        mButton[11] = (Button) findViewById(R.id.pa_addr_11);
+        mButton[12] = (Button) findViewById(R.id.pa_addr_12);
+        mButton[13] = (Button) findViewById(R.id.pa_addr_13);
+        mButton[14] = (Button) findViewById(R.id.pa_addr_14);
+        mButton[15] = (Button) findViewById(R.id.pa_addr_15);
+        mButton[16] = (Button) findViewById(R.id.pa_addr_16);
+        mButton[17] = (Button) findViewById(R.id.pa_addr_17);
+        mButton[18] = (Button) findViewById(R.id.pa_addr_18);
+        mButton[19] = (Button) findViewById(R.id.pa_addr_19);
+        mButton[20] = (Button) findViewById(R.id.pa_addr_20);
+        mButton[21] = (Button) findViewById(R.id.pa_addr_21);
+        mButton[22] = (Button) findViewById(R.id.pa_addr_22);
+        mButton[23] = (Button) findViewById(R.id.pa_addr_23);
+        mButton[24] = (Button) findViewById(R.id.pa_addr_24);
+        mButton[25] = (Button) findViewById(R.id.pa_addr_25);
 
-        for(int i=0; i < mButton.length ; i++){
+        //==============현위치=================
+        mButton[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(PermissionUtil.checkPermissions(AddressActivity.this, permissions[0])
+                        && PermissionUtil.checkPermissions(AddressActivity.this,permissions[1])){
+                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+
+                }else{
+                    PermissionUtil.requestPermissions(AddressActivity.this, permissions, requestCode);
+                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+
+                }
+            }
+        });
+
+
+//      ==================지역구================
+        for (int i = 1; i < mButton.length; i++) {
             mButton[i].setTag(i);
-            mButton[i].setOnClickListener(this);
+            // mButton[i].setOnClickListener(this);
             mButton[i].setOnFocusChangeListener(this);
         }
 
-    }
-
-
-
-    @Override
-    public void onClick(View v) {
-        Button newButton = (Button)v;
 
     }
 
-    public void submit(View v){
+
+    public void submit(View v) {
 // 기존에 설정된 주소와 같으면 Just finish();
-        if(value.equals(ManageSharedPreference.getPreference("address",getApplicationContext()))){
+        if (value.equals(ManageSharedPreference.getPreference("address", getApplicationContext()))) {
             finish();
-        }
-        else {
+        } else {
             ManageSharedPreference.insertPreference("address", value, getApplicationContext());
             this.setVisible(false);
             ManagePublicData.reFreshManagePublicData();
@@ -80,18 +104,58 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public void cancel(View v){
-        if(ManageSharedPreference.getPreference("address",getApplicationContext())==""){
-            Toast.makeText(this,"설정된 지역이 없습니다.", Toast.LENGTH_SHORT).show();
-        }else{
+    public void cancel(View v) {
+        if (ManageSharedPreference.getPreference("address", getApplicationContext()) == "") {
+            Toast.makeText(this, "설정된 지역이 없습니다.", Toast.LENGTH_SHORT).show();
+        } else {
             finish();
         }
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if(hasFocus){
-            value = ((Button)v).getText().toString();
+        if (hasFocus) {
+            value = ((Button) v).getText().toString();
         }
+    }
+
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+        onFinishReverseGeoCoding(s);
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+        onFinishReverseGeoCoding("Fail");
+    }
+
+    private void onFinishReverseGeoCoding(String result) {
+        Toast.makeText(getApplicationContext(), "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+    }
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+        MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude), true);
+        mReverseGeoCoder = new MapReverseGeoCoder(getResources().getString(R.string.kakao_map_key), mapPoint, AddressActivity.this, AddressActivity.this);
+        mReverseGeoCoder.startFindingAddress();
+
+    }
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
     }
 }

@@ -13,8 +13,8 @@ import android.support.v4.app.ActivityCompat;
 public class PermissionUtil {
 
     public static final int REQUEST_LOCATION = 1;
-    public static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_FINE_LOCATION,
-    Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET};
 
     public static void requestPermissions(final @NonNull Activity activity, final @NonNull String[] permissions, final int requestCode){
         if(Build.VERSION.SDK_INT>=23){

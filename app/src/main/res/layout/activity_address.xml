@@ -9,6 +9,10 @@
     android:background="#ffffff"
     android:paddingTop="@dimen/pa_vertical_padding"
     tools:context=".AddressActivity">
+    <net.daum.mf.map.api.MapView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/map"></net.daum.mf.map.api.MapView>
 
     <TextView
         android:layout_width="match_parent"
@@ -47,9 +51,9 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/pa_button_txt_size"
                     android:layout_weight="1"
-                    android:text="서울 전체"
+                    android:text="현위치"
                     android:id="@+id/pa_addr_0"
-                    android:focusableInTouchMode="true"
+                    android:focusableInTouchMode="false"
 
                     />
                 <Button
