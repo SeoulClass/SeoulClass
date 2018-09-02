@@ -4,6 +4,7 @@ import android.Manifest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,23 +19,27 @@ import net.daum.mf.map.api.MapView;
 public class AddressActivity extends AppCompatActivity implements View.OnFocusChangeListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     private Button[] mButton = new Button[26];
     private String value;
-    private MapView mapView;
+    private  MapView mapView;
     private MapReverseGeoCoder mReverseGeoCoder = null;
     private final String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     private final int requestCode = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
-        mapView = (MapView) findViewById(R.id.map);
-        mapView.setDaumMapApiKey(getResources().getString(R.string.kakao_map_key));
-        mapView.setCurrentLocationEventListener(this);
+
         //권한체크
-        if(!(PermissionUtil.checkPermissions(AddressActivity.this, permissions[0])
-                && PermissionUtil.checkPermissions(AddressActivity.this,permissions[1]))){
+        if (!(PermissionUtil.checkPermissions(AddressActivity.this, permissions[0])
+                && PermissionUtil.checkPermissions(AddressActivity.this, permissions[1]))) {
             PermissionUtil.requestPermissions(AddressActivity.this, permissions, requestCode);
         }
+        mapView = (MapView)findViewById(R.id.addr_map);
+
+        mapView.setDaumMapApiKey(getResources().getString(R.string.kakao_map_key));
+        mapView.setCurrentLocationEventListener(AddressActivity.this);
+
 
         mButton[0] = (Button) findViewById(R.id.pa_addr_0);
         mButton[1] = (Button) findViewById(R.id.pa_addr_1);
@@ -67,15 +72,8 @@ public class AddressActivity extends AppCompatActivity implements View.OnFocusCh
         mButton[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(PermissionUtil.checkPermissions(AddressActivity.this, permissions[0])
-                        && PermissionUtil.checkPermissions(AddressActivity.this,permissions[1])){
-                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
 
-                }else{
-                    PermissionUtil.requestPermissions(AddressActivity.this, permissions, requestCode);
-                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-
-                }
+                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
             }
         });
 
@@ -84,6 +82,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnFocusCh
         for (int i = 1; i < mButton.length; i++) {
             mButton[i].setTag(i);
             // mButton[i].setOnClickListener(this);
+            mButton[i].clearFocus();
             mButton[i].setOnFocusChangeListener(this);
         }
 
@@ -102,6 +101,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnFocusCh
             ManagePublicData.getInstance(AddressActivity.this).parsePublicData.execute();
         }
 
+
     }
 
     public void cancel(View v) {
@@ -119,6 +119,11 @@ public class AddressActivity extends AppCompatActivity implements View.OnFocusCh
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
 
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
@@ -131,14 +136,16 @@ public class AddressActivity extends AppCompatActivity implements View.OnFocusCh
     }
 
     private void onFinishReverseGeoCoding(String result) {
-        Toast.makeText(getApplicationContext(), "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
+        value = result.split(" ")[1];
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+        submit(findViewById(R.id.submit));
+
     }
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-        MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude), true);
+//        MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
+//        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude), true);
         mReverseGeoCoder = new MapReverseGeoCoder(getResources().getString(R.string.kakao_map_key), mapPoint, AddressActivity.this, AddressActivity.this);
         mReverseGeoCoder.startFindingAddress();
 

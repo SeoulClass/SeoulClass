@@ -65,7 +65,7 @@
 
         <activity android:name=".DetailActivity" />
         <activity android:name=".AddressActivity"
-            android:theme="@style/PopUpTheme" />
+            android:theme="@style/PopUpTheme"/>
         <activity android:name=".DibsActivity" />
         <activity android:name=".ReviewActivity"></activity>
 
