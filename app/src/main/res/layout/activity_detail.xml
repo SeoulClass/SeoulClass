@@ -30,7 +30,6 @@
             android:background="@android:color/white"
             android:id="@+id/dt_webView"
             android:layout_weight="4"
-
             />
         <!--찜, 예약-->
         <LinearLayout
@@ -38,6 +37,7 @@
             android:background="@drawable/textlines"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:id="@+id/dt_menu"
             android:paddingHorizontal="30dp"
             android:orientation="horizontal"
             android:layout_marginBottom="10dp">

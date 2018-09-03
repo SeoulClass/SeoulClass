@@ -23,6 +23,18 @@
     <string name="main_10">정보통신(%1$d)</string>
     <string name="main_11">기타(%1$d)</string>
 
+    <string name="_main_1">건강/스포츠</string>
+    <string name="_main_2">취미레저</string>
+    <string name="_main_3">취미</string>
+    <string name="_main_4">자연/과학</string>
+    <string name="_main_5">생활체육</string>
+    <string name="_main_6">체험/견학</string>
+    <string name="_main_7">교양</string>
+    <string name="_main_8">역사</string>
+    <string name="_main_9">도시농업</string>
+    <string name="_main_10">정보통신</string>
+    <string name="_main_11">기타</string>
+
 
     <string name="settings">Settings</string>
 

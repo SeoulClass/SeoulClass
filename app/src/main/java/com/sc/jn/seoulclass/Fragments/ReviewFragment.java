@@ -70,6 +70,17 @@ public class ReviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        DetailActivity parent = (DetailActivity)getActivity();
+        if(isVisibleToUser){
+            parent.findViewById(R.id.dt_webView).setVisibility(View.GONE);
+            parent.findViewById(R.id.dt_menu).setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

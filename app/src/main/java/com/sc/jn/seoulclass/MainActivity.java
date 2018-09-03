@@ -266,57 +266,78 @@ public class MainActivity extends AppCompatActivity
         switch(view.getId()){
             case  R.id.main_1 : {
                 intent.putExtra("nm", 1);
+                intent.putExtra("title",getResources().getString(R.string._main_1));
                 startActivity(intent);
                 break;
             }
             case  R.id.main_2 : {
                 intent.putExtra("nm", 2);
+                intent.putExtra("title",getResources().getString(R.string._main_2));
+
                 startActivity(intent);
                 break;
             }
             case  R.id.main_3 : {
                 intent.putExtra("nm", 3);
+                intent.putExtra("title",getResources().getString(R.string._main_3));
+
                 startActivity(intent);
                 break;
             }
             case  R.id.main_4 : {
                 intent.putExtra("nm", 4);
+                intent.putExtra("title",getResources().getString(R.string._main_4));
+
                 startActivity(intent);
                 break;
             }
             case  R.id.main_5 : {
                 intent.putExtra("nm", 5);
+                intent.putExtra("title",getResources().getString(R.string._main_5));
+
                 startActivity(intent);
                 break;
             }
             case  R.id.main_6 : {
                 intent.putExtra("nm", 6);
+                intent.putExtra("title",getResources().getString(R.string._main_6));
+
                 startActivity(intent);
                 break;
             }
             case  R.id.main_7 : {
                 intent.putExtra("nm", 7);
+                intent.putExtra("title",getResources().getString(R.string._main_7));
+
                 startActivity(intent);
                 break;
             }
             case  R.id.main_8 : {
                 intent.putExtra("nm", 8);
+                intent.putExtra("title",getResources().getString(R.string._main_8));
+
                 startActivity(intent);
                 break;
             }
 
             case R.id.main_9 : {
                 intent.putExtra("nm",9);
+                intent.putExtra("title",getResources().getString(R.string._main_9));
+
                 startActivity(intent);
                 break;
             }
             case R.id.main_10 : {
                 intent.putExtra("nm",10);
+                intent.putExtra("title",getResources().getString(R.string._main_10));
+
                 startActivity(intent);
                 break;
             }
             case R.id.main_11 : {
                 intent.putExtra("nm",11);
+                intent.putExtra("title",getResources().getString(R.string._main_11));
+
                 startActivity(intent);
                 break;
             }

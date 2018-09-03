@@ -47,6 +47,7 @@ public class DetailActivity extends AppCompatActivity {
 
         DetailAdapter detailAdapter = new DetailAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager)findViewById(R.id.dt_viewPager);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(detailAdapter);
 
         TabLayout mTab = (TabLayout)findViewById(R.id.dt_tabs);
